@@ -66,5 +66,6 @@
 
 
 
-# MONGO_URL=mongodb+srv://mydbuser:zcommerce@cluster0.c2n4e.mongodb.net/Zcommerce?retryWrites=true&w=majority,
+# MONGO_URL=mongodb+srv://mydbuser:zcommerce@cluster0.c2n4e.mongodb.net/Zcommerce?retryWrites=true
 # JWT_SEC=INp8IvdIyeMcoGAgFGoA61DdBglwwSqnXJZkgz8PSnw
+# PASS_SEC=ifrat
