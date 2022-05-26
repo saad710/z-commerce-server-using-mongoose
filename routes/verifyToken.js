@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const createError = require('http-errors');
 
 const verifyToken = (req, res, next) => {
 //   const authHeader = req.headers.token;
@@ -12,13 +13,14 @@ const verifyToken = (req, res, next) => {
 //   } else {
 //     return res.status(401).json("You are not authenticated!");
 //   }
-const token = req.cookies.access_token;
+const token =  req.cookies?.access_token;
+console.log(token)
   if (!token) {
-    return next(createError(401, "You are not authenticated!"));
+    return res.status(401).json("You are not authenticated!");
   }
 
   jwt.verify(token, process.env.JWT_SEC, (err, user) => {
-    if (err) return next(createError(403, "Token is not valid!"));
+    if (err) return res.status(403).json("Token is not valid!");
     req.user = user;
     next();
   });
