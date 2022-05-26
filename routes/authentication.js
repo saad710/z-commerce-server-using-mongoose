@@ -14,20 +14,10 @@ router.post("/register", async (req, res) => {
       process.env.PASS_SEC
     ).toString(),
   });
-  try {
-    //new_user_saved
-    const savedUser = await newUser.save();
-    //access_token
-    const accessToken = await jwt.sign(
-      {
-          id: savedUser._id,
-          isAdmin: savedUser.isAdmin,
-      },
-      process.env.JWT_SEC,
-          {expiresIn:"3d"}
-      );
 
-    res.status(201).json({auth:true,token:accessToken});
+  try {
+    const savedUser = await newUser.save();
+    res.status(201).json(savedUser);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -61,9 +51,16 @@ router.post("/login", async (req, res) => {
         process.env.JWT_SEC,
             {expiresIn:"3d"}
         );
-    res.status(200).json({ auth: true, token: accessToken })
+    // res.status(200).json({ auth: true, token: accessToken })
       // const { password, ...others } = user._doc;  
       // res.status(200).json({...others, accessToken});
+      const { password, isAdmin, ...otherDetails } = user._doc;
+      res
+        .cookie("access_token", accessToken, {
+          httpOnly: true,
+        })
+        .status(200)
+        .json({ details: { ...otherDetails }, isAdmin });
   } catch (err) {
     res.status(500).json(err)
   }
