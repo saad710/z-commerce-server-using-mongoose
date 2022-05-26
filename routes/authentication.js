@@ -40,27 +40,29 @@ router.post("/login", async (req, res) => {
   const originalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
   const inputPassword = req.body.password;
   
-  originalPassword != inputPassword && 
+  if(originalPassword != inputPassword) {
       res.status(401).json("Wrong Password");
-
-      const accessToken = jwt.sign(
-        {
-            id: user._id,
-            isAdmin: user.isAdmin,
-        },
-        process.env.JWT_SEC,
-            {expiresIn:"3d"}
-        );
-    // res.status(200).json({ auth: true, token: accessToken })
-      // const { password, ...others } = user._doc;  
-      // res.status(200).json({...others, accessToken});
-      const { password, isAdmin, ...otherDetails } = user._doc;
-      res
-        .cookie("access_token", accessToken, {
-          httpOnly: true,
-        })
-        .status(200)
-        .json({ details: { ...otherDetails }, isAdmin });
+  }
+  else{
+    const accessToken = jwt.sign(
+      {
+          id: user._id,
+          isAdmin: user.isAdmin,
+      },
+      process.env.JWT_SEC,
+          {expiresIn:"3d"}
+      );
+  // res.status(200).json({ auth: true, token: accessToken })
+    // const { password, ...others } = user._doc;  
+    // res.status(200).json({...others, accessToken});
+    const { password, isAdmin, ...otherDetails } = user._doc;
+    res
+      .cookie("access_token", accessToken, {
+        httpOnly: true,
+      })
+      .status(200)
+      .json({ details: { ...otherDetails }, isAdmin });
+  }
   } catch (err) {
     res.status(500).json(err)
   }
