@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const createError = require('http-errors');
 
 const verifyToken = (req, res, next) => {
 //   const authHeader = req.headers.token;
@@ -28,10 +27,14 @@ console.log(token)
 
 const verifyTokenAndAuthorization = (req, res, next) => {
   verifyToken(req, res, () => {
+    console.log(req)
+    console.log({query: req?.query?.id});
+    console.log(req.params.id)
     if (req.user.id === req.params.id || req.user.isAdmin) {
       next();
     } else {
-      res.status(403).json("You are not alowed to do that!");
+      console.log("did not match")
+      res.status(403).json("You are not allowed to do that!");
     }
   });
 };
